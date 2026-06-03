@@ -39,16 +39,16 @@ double getSafeDouble(int minValue) {
 
 
 void showMenu() {
-    std::cout << "\nОберіть примітив для додавання:\n"
-        << "1. Лінія\n"
-        << "2. Прямокутник\n"
-        << "3. Коло\n"
-        << "4. Правильний багатокутник (5-8 сторін)\n"
-        << "5. Сектор\n"
-        << "6. Замкнена ламана\n"
-        << "7. Розрахувати аналітику та завершити\n"
-		<< "0. Вихід без розрахунку\n"
-        << "Ваш вибір: ";
+    std::cout << "\nОберіть примітив для додавання:" << std::endl;
+    std::cout << "1 - Лінія" << std::endl;
+    std::cout << "2 - Прямокутник" << std::endl;
+    std::cout << "3 - Коло" << std::endl;
+    std::cout << "4 - Правильний багатокутник (5-8 сторін)" << std::endl;
+    std::cout << "5 - Сектор" << std::endl;
+    std::cout << "6 - Замкнена ламана" << std::endl;
+    std::cout << "7 - Розрахувати аналітику та завершити" << std::endl;
+    std::cout << "0 - Вихід без розрахунку" << std::endl;
+    std::cout << "Ваш вибір: ";
 }
 
 int main()
@@ -129,7 +129,7 @@ int main()
                 std::cout << "Введіть кількість точок ламаної: ";
                 count = getSafeInt();
                 std::vector<Point2D> pts;
-                for (int i = 0; i < count; ++i) {
+                for (int i = 0; i < count; i+=1) {
                     double x, y;
                     std::cout << "Точка " << (i + 1) << " (X Y): ";
                     x = getSafeDouble(std::numeric_limits<int>::lowest());
@@ -151,27 +151,25 @@ int main()
         }
     }
 
-    std::cout << "\nРЕЗУЛЬТАТИ АНАЛІЗУ ЗОБРАЖЕННЯ\n";
+    std::cout << "\nРезультати Аналізу графічних примітив\n";
     double totalArea = 0.0;
     double totalPerimeter = 0.0;
 
     std::cout << std::fixed << std::setprecision(2);
-    for (size_t i = 0; i < userCanvas.size(); ++i) {
+    for (size_t i = 0; i < userCanvas.size(); i+=1) {
         double area = userCanvas[i]->getArea();
         double perimeter = userCanvas[i]->getPerimeter();
         totalArea += area;
         totalPerimeter += perimeter;
 
-        std::cout << (i + 1) << ". " << userCanvas[i]->getName()
-            << " -> Площа: " << area << " кв.мм, Периметр/Довжина: " << perimeter << " мм\n";
+        std::cout << (i + 1) << ". " << userCanvas[i]->getName() << " -> Площа: " << area << " кв.мм, Периметр/Довжина: " << perimeter << " мм\n";
     }
 
     const double inkConsumptionPerMm2 = 12.0; // мл / мм²
     double totalInkVolume = totalArea * inkConsumptionPerMm2;
-
-    std::cout << "-------------------------------------\n";
-    std::cout << "i.  Сумарна площа створених фігур: " << totalArea << " мм^2\n";
-    std::cout << "ii. Необхідний об'єм фарби для друку зображення: " << totalInkVolume << " мл (із розрахунку " << inkConsumptionPerMm2 << " мл/мм^2)\n";
+;
+    std::cout << "\ni.  Сумарна площа створених фігур: " << totalArea << " мм^2"<< std::endl;
+    std::cout << "ii. Необхідний об'єм фарби для друку зображення: " << totalInkVolume << " мл (із розрахунку " << inkConsumptionPerMm2 << " мл/мм^2)" << std::endl;;
 
     return 0;
 }
