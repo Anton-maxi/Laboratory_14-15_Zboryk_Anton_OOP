@@ -27,12 +27,12 @@ int getSafeInt() {
 }
 
 void getSafeDouble(int minValue, double** values, int size) {
-    //double value;
-	int i = 0;
-    while (i >= size || !(std::cin >> *values[i]) || *values[i] <= minValue ) {
-        std::cin.clear(); // Скидаємо прапорець помилки cin
-        std::cin.ignore(10000, '\n'); // Очищаємо буфер від неправильних символів
-        std::cout << "Помилка введення! Будь ласка, введіть число більше " << minValue << ": ";
+    for (int i = 0; i < size; i+=1) {
+        while (!(std::cin >> *values[i]) || *values[i] <= minValue) {
+            std::cin.clear(); // Скидаємо прапорець помилки
+            std::cin.ignore(10000, '\n'); // Очищаємо буфер
+            std::cout << "Помилка введення! Будь ласка, введіть число більше " << minValue << " (для параметра " << (i + 1) << "): ";
+        }
     }
     std::cin.ignore(10000, '\n'); // Очищаємо залишок рядка
 }
@@ -156,7 +156,7 @@ int main()
     double totalArea = 0.0;
     double totalPerimeter = 0.0;
 
-    std::cout << std::fixed << std::setprecision(2);
+    std::cout << std::fixed << std::setprecision(4);
     for (size_t i = 0; i < userCanvas.size(); i+=1) {
         double area = userCanvas[i]->getArea();
         double perimeter = userCanvas[i]->getPerimeter();
@@ -172,6 +172,11 @@ int main()
     std::cout << "\ni.  Сумарна площа створених фігур: " << totalArea << " мм^2"<< std::endl;
     std::cout << "ii. Необхідний об'єм фарби для друку зображення: " << totalInkVolume << " мл (із розрахунку " << inkConsumptionPerMm2 << " мл/мм^2)" << std::endl;;
 
+    for (Figure* fig : userCanvas) {
+        delete fig;
+    }
+    userCanvas.clear();
+    
     return 0;
 }
 

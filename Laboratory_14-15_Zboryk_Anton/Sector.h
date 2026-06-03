@@ -1,7 +1,5 @@
 #pragma once
 #include "Figure.h"
-#include <corecrt_math_defines.h>
-#include <iostream>
 
 class Sector : public Figure {
 private:

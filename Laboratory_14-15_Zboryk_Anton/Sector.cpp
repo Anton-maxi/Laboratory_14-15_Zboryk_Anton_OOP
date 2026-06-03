@@ -1,6 +1,6 @@
 #include "Sector.h"
 #include <corecrt_math_defines.h>
-#include <iostream>
+#include <cmath>
 
 Sector::Sector(double r, double angle) : radius(r), angleInDegrees(angle) {}
 

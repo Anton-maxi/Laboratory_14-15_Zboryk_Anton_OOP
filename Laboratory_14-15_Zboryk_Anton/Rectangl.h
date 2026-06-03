@@ -2,7 +2,6 @@
 #include "Figure.h"
 #include "Circle.h"
 #include <string>
-#include <memory>
 
 class Rectangl : public Figure 
 {

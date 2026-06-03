@@ -1,6 +1,4 @@
 #include "Rectangl.h"
-#include <string>
-#include <memory>
 #include <cmath>
 #include <stdexcept>
 
