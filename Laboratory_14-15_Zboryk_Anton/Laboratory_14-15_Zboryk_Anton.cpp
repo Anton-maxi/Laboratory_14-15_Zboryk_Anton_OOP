@@ -26,15 +26,15 @@ int getSafeInt() {
     return value;
 }
 
-double getSafeDouble(int minValue) {
-    double value;
-    while (!(std::cin >> value) || value <= minValue) {
+void getSafeDouble(int minValue, double** values, int size) {
+    //double value;
+	int i = 0;
+    while (i >= size || !(std::cin >> *values[i]) || *values[i] <= minValue ) {
         std::cin.clear(); // Скидаємо прапорець помилки cin
         std::cin.ignore(10000, '\n'); // Очищаємо буфер від неправильних символів
         std::cout << "Помилка введення! Будь ласка, введіть число більше " << minValue << ": ";
     }
     std::cin.ignore(10000, '\n'); // Очищаємо залишок рядка
-    return value;
 }
 
 
@@ -68,26 +68,26 @@ int main()
         try {
             if (choice == 1) {
                 double x1, y1, x2, y2;
+
                 std::cout << "Введіть X1 Y1 X2 Y2 (через пробіл): ";
-                x1 = getSafeDouble(std::numeric_limits<int>::lowest());
-                y1 = getSafeDouble(std::numeric_limits<int>::lowest());
-                x2 = getSafeDouble(std::numeric_limits<int>::lowest());
-                y2 = getSafeDouble(std::numeric_limits<int>::lowest());
+				double* coords[] = { &x1, &y1, &x2, &y2 };
+                getSafeDouble(std::numeric_limits<int>::lowest(), coords, 4);
                 userCanvas.push_back(new Line(Point2D(x1, y1), Point2D(x2, y2)));
                 std::cout << "Лінію додано.\n";
             }
             else if (choice == 2) {
                 double w, h;
                 std::cout << "Введіть ширину та висоту (в мм): ";
-                w = getSafeDouble(0);
-                h = getSafeDouble(0);
+				double* dimensions[] = { &w, &h };
+                getSafeDouble(0, dimensions, 2);
                 userCanvas.push_back(new Rectangl(w, h));
                 std::cout << "Прямокутник додано.\n";
             }
             else if (choice == 3) {
                 double r;
                 std::cout << "Введіть радіус кола (в мм): ";
-                r = getSafeDouble(0);
+				double* radius[] = { &r };
+                getSafeDouble(0, radius, 1);
                 userCanvas.push_back(new Circle(r));
                 std::cout << "Коло додано.\n";
             }
@@ -96,7 +96,8 @@ int main()
                 double length;
                 std::cout << "Введіть кількість сторін (5-8) та довжину сторони: ";
                 sides = getSafeInt();
-                length = getSafeDouble(0);
+                double* lengthPtr[] = { &length };
+                getSafeDouble(0, lengthPtr, 1);
 
                 auto polygon = new CorrectPolygon(sides, length);
 
@@ -119,8 +120,8 @@ int main()
             else if (choice == 5) {
                 double r, angle;
                 std::cout << "Введіть радіус та кут сектора в градусах: ";
-                r = getSafeDouble(0);
-                angle = getSafeDouble(0);
+				double* sectorParams[] = { &r, &angle };
+                getSafeDouble(0, sectorParams, 2);
                 userCanvas.push_back(new Sector(r, angle));
                 std::cout << "Сектор додано.\n";
             }
@@ -132,8 +133,8 @@ int main()
                 for (int i = 0; i < count; i+=1) {
                     double x, y;
                     std::cout << "Точка " << (i + 1) << " (X Y): ";
-                    x = getSafeDouble(std::numeric_limits<int>::lowest());
-                    y = getSafeDouble(std::numeric_limits<int>::lowest());
+                    double* coords[] = { &x, &y };
+                    getSafeDouble(std::numeric_limits<int>::lowest(), coords, 2);
                     pts.emplace_back(x, y);
                 }
                 userCanvas.push_back(new Closed_broken_line(pts));
