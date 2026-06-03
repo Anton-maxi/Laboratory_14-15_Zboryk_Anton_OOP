@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <limits>
 #include <vector>
 #include <windows.h>
 #include "Figure.h"
@@ -25,6 +26,18 @@ int getSafeInt() {
     return value;
 }
 
+double getSafeDouble(int minValue) {
+    double value;
+    while (!(std::cin >> value) || value <= minValue) {
+        std::cin.clear(); // Скидаємо прапорець помилки cin
+        std::cin.ignore(10000, '\n'); // Очищаємо буфер від неправильних символів
+        std::cout << "Помилка введення! Будь ласка, введіть число більше " << minValue << ": ";
+    }
+    std::cin.ignore(10000, '\n'); // Очищаємо залишок рядка
+    return value;
+}
+
+
 void showMenu() {
     std::cout << "\nОберіть примітив для додавання:\n"
         << "1. Лінія\n"
@@ -43,9 +56,7 @@ int main()
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
 
-    //std::vector<std::unique_ptr<Figure>> userCanvas;
     std::vector<Figure*> userCanvas;
-    //bool running = true;
 
     std::cout << "Найпростіший графічний редактор аналізу зображень\n";
     int choice=-1;
@@ -58,21 +69,25 @@ int main()
             if (choice == 1) {
                 double x1, y1, x2, y2;
                 std::cout << "Введіть X1 Y1 X2 Y2 (через пробіл): ";
-                std::cin >> x1 >> y1 >> x2 >> y2;
+                x1 = getSafeDouble(std::numeric_limits<int>::lowest());
+                y1 = getSafeDouble(std::numeric_limits<int>::lowest());
+                x2 = getSafeDouble(std::numeric_limits<int>::lowest());
+                y2 = getSafeDouble(std::numeric_limits<int>::lowest());
                 userCanvas.push_back(new Line(Point2D(x1, y1), Point2D(x2, y2)));
                 std::cout << "Лінію додано.\n";
             }
             else if (choice == 2) {
                 double w, h;
                 std::cout << "Введіть ширину та висоту (в мм): ";
-                std::cin >> w >> h;
+                w = getSafeDouble(0);
+                h = getSafeDouble(0);
                 userCanvas.push_back(new Rectangl(w, h));
                 std::cout << "Прямокутник додано.\n";
             }
             else if (choice == 3) {
                 double r;
                 std::cout << "Введіть радіус кола (в мм): ";
-                std::cin >> r;
+                r = getSafeDouble(0);
                 userCanvas.push_back(new Circle(r));
                 std::cout << "Коло додано.\n";
             }
@@ -80,20 +95,21 @@ int main()
                 int sides;
                 double length;
                 std::cout << "Введіть кількість сторін (5-8) та довжину сторони: ";
-                std::cin >> sides >> length;
+                sides = getSafeInt();
+                length = getSafeDouble(0);
 
                 auto polygon = new CorrectPolygon(sides, length);
 
                 std::cout << "Бажаєте автоматично згенерувати вписане (1) чи описане (2) коло? (0 - ні): ";
                 int relation;
-                std::cin >> relation;
+                relation = getSafeInt();
 
                 if (relation == 1) {
-                    userCanvas.push_back(polygon->createInscribedCircle().release());
+                    userCanvas.push_back(polygon->createInscribedCircle());
                     std::cout << "Вписане коло додано.\n";
                 }
                 else if (relation == 2) {
-                    userCanvas.push_back(polygon->createCircumscribedCircle().release());
+                    userCanvas.push_back(polygon->createCircumscribedCircle());
                     std::cout << "Описане коло додано.\n";
                 }
 
@@ -103,26 +119,27 @@ int main()
             else if (choice == 5) {
                 double r, angle;
                 std::cout << "Введіть радіус та кут сектора в градусах: ";
-                std::cin >> r >> angle;
+                r = getSafeDouble(0);
+                angle = getSafeDouble(0);
                 userCanvas.push_back(new Sector(r, angle));
                 std::cout << "Сектор додано.\n";
             }
             else if (choice == 6) {
                 int count;
                 std::cout << "Введіть кількість точок ламаної: ";
-                std::cin >> count;
+                count = getSafeInt();
                 std::vector<Point2D> pts;
                 for (int i = 0; i < count; ++i) {
                     double x, y;
                     std::cout << "Точка " << (i + 1) << " (X Y): ";
-                    std::cin >> x >> y;
+                    x = getSafeDouble(std::numeric_limits<int>::lowest());
+                    y = getSafeDouble(std::numeric_limits<int>::lowest());
                     pts.emplace_back(x, y);
                 }
                 userCanvas.push_back(new Closed_broken_line(pts));
                 std::cout << "Замкнену ламану додано.\n";
             }
             else if (choice == 7) {
-                //running = false;
 				break;
             }
             else {
@@ -134,10 +151,7 @@ int main()
         }
     }
 
-    // ==========================================
-    // ВИВЕДЕННЯ РЕЗУЛЬТАТІВ АНАЛІЗУ
-    // ==========================================
-    std::cout << "\n--- РЕЗУЛЬТАТИ АНАЛІЗУ ЗОБРАЖЕННЯ ---\n";
+    std::cout << "\nРЕЗУЛЬТАТИ АНАЛІЗУ ЗОБРАЖЕННЯ\n";
     double totalArea = 0.0;
     double totalPerimeter = 0.0;
 

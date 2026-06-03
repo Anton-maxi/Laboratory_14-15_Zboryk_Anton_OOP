@@ -1,9 +1,14 @@
 #include "Correct_polygon.h"
+#include <corecrt_math_defines.h>
+#include <cmath>
+#include <stdexcept>
 
-CorrectPolygon::CorrectPolygon(int sides, double length) : sidesCount(sides), sideLength(length) {
+CorrectPolygon::CorrectPolygon(int sides, double length){
     if (sides < 5 || sides > 8) {
         throw std::invalid_argument("Кількість сторін повинна бути від 5 до 8.");
     }
+    this->sidesCount = sides;
+    this->sideLength = length;
 }
 
 std::string CorrectPolygon::getName() const {
@@ -16,12 +21,12 @@ double CorrectPolygon::getArea() const {
 
 double CorrectPolygon::getPerimeter() const { return sidesCount * sideLength; }
 // Зв'язок "описані/вписані": створює об'єкт колу
-std::unique_ptr<Circle> CorrectPolygon::createCircumscribedCircle() const {
+Circle* CorrectPolygon::createCircumscribedCircle() const {
     double radius = sideLength / (2 * std::sin(M_PI / sidesCount));
-    return std::make_unique<Circle>(radius);
+    return new Circle(radius);
 }
 
-std::unique_ptr<Circle> CorrectPolygon::createInscribedCircle() const {
+Circle* CorrectPolygon::createInscribedCircle() const {
     double radius = sideLength / (2 * std::tan(M_PI / sidesCount));
-    return std::make_unique<Circle>(radius);
+    return new Circle(radius);
 }

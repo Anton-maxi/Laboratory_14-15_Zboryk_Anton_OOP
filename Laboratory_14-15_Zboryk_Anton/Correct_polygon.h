@@ -1,7 +1,5 @@
 #pragma once
 #include "Figure.h"
-#include <iostream>
-#include <corecrt_math_defines.h>
 #include "Circle.h"
 
 class CorrectPolygon : public Figure {
@@ -18,8 +16,7 @@ public:
     double getPerimeter() const override;
 
     // Зв'язок "описані/вписані": створює об'єкт колу
-    std::unique_ptr<Circle> createCircumscribedCircle() const;
-
-    std::unique_ptr<Circle> createInscribedCircle() const;
+    Circle* createCircumscribedCircle() const;
+    Circle* createInscribedCircle() const;
 };
 
