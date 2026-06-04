@@ -139,16 +139,6 @@ int main()
             }
             else if (choice == 6) {
                 int count;
-    //            while (true) {
-    //                std::cout << "Введіть кількість точок для замкненої ламаної (мінімум 3): ";
-    //                count = getSafeInt();
-    //                if (count >= 3) {
-    //                    break;
-    //                }
-    //                else {
-    //                    std::cout << "Замкнена ламана повинна мати принаймні 3 точки. Спробуйте знову.\n";
-    //                }
-				//}
                 std::cout << "Введіть кількість точок ламаної: ";
                 count = getSafeInt();
                 std::vector<Point2D> pts;
@@ -161,9 +151,6 @@ int main()
                 }
                 userCanvas.push_back(new Closed_broken_line(pts));
                 std::cout << "Замкнену ламану додано.\n";
-                for (int i = 0; i < 3; i += 1) {
-					std::cout << "Точка " << (i + 1) << ": (" << pts[i].GetX() << ", " << pts[i].GetY() << ")\n";
-                }
             }
             else if (choice == 7) {
 				break;
