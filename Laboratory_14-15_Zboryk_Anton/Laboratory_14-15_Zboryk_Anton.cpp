@@ -27,14 +27,16 @@ int getSafeInt() {
 }
 
 void getSafeDouble(int minValue, double** values, int size) {
-    for (int i = 0; i < size; i+=1) {
+    for (int i = 0; i < size; i += 1) {
+        // Якщо зчитування невдале або число не відповідає умові
         while (!(std::cin >> *values[i]) || *values[i] <= minValue) {
-            std::cin.clear(); // Скидаємо прапорець помилки
-            std::cin.ignore(10000, '\n'); // Очищаємо буфер
-            std::cout << "Помилка введення! Будь ласка, введіть число більше " << minValue << " (для параметра " << (i + 1) << "): ";
+            std::cin.clear(); // Скидаємо стан помилки, якщо користувач ввів букву
+            std::cin.ignore(10000, '\n'); // Знищуємо саме той некоректний символ, що зламав зчитування
+            std::cout << "Помилка введення! Будь ласка, введіть число більше " << minValue << std::endl << "Будь ласка, перевведіть параметр " << (i + 1) << " та всі наступні параметри фігури: ";
         }
     }
-    std::cin.ignore(10000, '\n'); // Очищаємо залишок рядка
+    // Очищаємо залишок рядка (наприклад, натискання Enter) після того, як ВСІ елементи зчитано успішно
+    std::cin.ignore(10000, '\n');
 }
 
 
@@ -93,25 +95,35 @@ int main()
             }
             else if (choice == 4) {
                 int sides;
-                double length;
+                double length, sides_double;
                 std::cout << "Введіть кількість сторін (5-8) та довжину сторони: ";
-                sides = getSafeInt();
-                double* lengthPtr[] = { &length };
-                getSafeDouble(0, lengthPtr, 1);
+                double* lengthPtr[] = { &sides_double, &length };
+                getSafeDouble(0, lengthPtr, 2);
+                sides = (int)sides_double;
 
                 auto polygon = new CorrectPolygon(sides, length);
 
-                std::cout << "Бажаєте автоматично згенерувати вписане (1) чи описане (2) коло? (0 - ні): ";
-                int relation;
-                relation = getSafeInt();
+                while (true) {
+                    std::cout << "Бажаєте автоматично згенерувати вписане (1) чи описане (2) коло? (0 - ні): ";
+                    int relation;
+                    relation = getSafeInt();
 
-                if (relation == 1) {
-                    userCanvas.push_back(polygon->createInscribedCircle());
-                    std::cout << "Вписане коло додано.\n";
-                }
-                else if (relation == 2) {
-                    userCanvas.push_back(polygon->createCircumscribedCircle());
-                    std::cout << "Описане коло додано.\n";
+                    if (relation == 1) {
+                        userCanvas.push_back(polygon->createInscribedCircle());
+                        std::cout << "Вписане коло додано.\n";
+						break;
+                    }
+                    else if (relation == 2) {
+                        userCanvas.push_back(polygon->createCircumscribedCircle());
+                        std::cout << "Описане коло додано.\n";
+						break;
+                    }
+                    else if (relation == 0) {
+                        break;
+                    }
+                    else {
+                        std::cout << "Некоректний вибір. Спробуйте знову.\n";
+					}
                 }
 
                 userCanvas.push_back(polygon);
@@ -127,6 +139,16 @@ int main()
             }
             else if (choice == 6) {
                 int count;
+    //            while (true) {
+    //                std::cout << "Введіть кількість точок для замкненої ламаної (мінімум 3): ";
+    //                count = getSafeInt();
+    //                if (count >= 3) {
+    //                    break;
+    //                }
+    //                else {
+    //                    std::cout << "Замкнена ламана повинна мати принаймні 3 точки. Спробуйте знову.\n";
+    //                }
+				//}
                 std::cout << "Введіть кількість точок ламаної: ";
                 count = getSafeInt();
                 std::vector<Point2D> pts;
@@ -139,6 +161,9 @@ int main()
                 }
                 userCanvas.push_back(new Closed_broken_line(pts));
                 std::cout << "Замкнену ламану додано.\n";
+                for (int i = 0; i < 3; i += 1) {
+					std::cout << "Точка " << (i + 1) << ": (" << pts[i].GetX() << ", " << pts[i].GetY() << ")\n";
+                }
             }
             else if (choice == 7) {
 				break;
