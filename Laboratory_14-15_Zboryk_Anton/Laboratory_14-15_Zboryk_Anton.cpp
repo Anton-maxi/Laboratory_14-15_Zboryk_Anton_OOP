@@ -178,7 +178,7 @@ int main()
         std::cout << (i + 1) << ". " << userCanvas[i]->getName() << " -> Площа: " << area << " кв.мм, Периметр/Довжина: " << perimeter << " мм\n";
     }
 
-    const double inkConsumptionPerMm2 = 12.0; // мл / мм²
+    const double inkConsumptionPerMm2 = 12.0; // мл / мм^2
     double totalInkVolume = totalArea * inkConsumptionPerMm2;
 ;
     std::cout << "\ni.  Сумарна площа створених фігур: " << totalArea << " мм^2"<< std::endl;

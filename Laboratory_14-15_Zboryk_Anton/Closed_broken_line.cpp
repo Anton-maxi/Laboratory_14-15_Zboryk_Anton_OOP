@@ -15,7 +15,7 @@ std::string Closed_broken_line::getName() const { return "Замкнена ламана"; }
 double Closed_broken_line::getPerimeter() const {
     double perimeter = 0;
     size_t n = points.size();
-    for (size_t i = 0; i < n; ++i) {
+    for (size_t i = 0; i < n; i+=1) {
         perimeter += points[i].DistanceTo(points[(i + 1) % n]);
     }
     return perimeter;
@@ -27,7 +27,7 @@ double Closed_broken_line::getArea() const {
     size_t n = points.size();
     size_t j = n - 1;
 
-    for (size_t i = 0; i < n; ++i) {
+    for (size_t i = 0; i < n; i+=1) {
         area += (points[j].GetX() + points[i].GetX()) * (points[j].GetY() - points[i].GetY());
         j = i;
     }
